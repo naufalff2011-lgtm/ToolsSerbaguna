@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tools Serbaguna</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#f1f5f9;font-family:Arial,sans-serif;padding:20px}
+header{padding:18px 0}
+header h1{margin:0;color:#38bdf8;font-size:27px}
+header p{color:#94a3b8}
+h2{font-size:18px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:#151e32;border:1px solid #293750;border-radius:16px;padding:17px 12px;color:white;text-align:left;min-height:110px}
+.card span{font-size:27px}
+.card h3{font-size:15px;margin:12px 0 5px}
+.card p{font-size:12px;color:#94a3b8;margin:0}
+.panel{margin-top:22px;background:#151e32;padding:16px;border-radius:16px}
+input,textarea{width:100%;padding:12px;margin:7px 0;background:#0b1020;color:white;border:1px solid #334155;border-radius:9px}
+button.action{background:#0284c7;border:0;color:white;padding:11px;border-radius:9px;margin-top:5px}
+#result{white-space:pre-wrap;overflow-wrap:anywhere;color:#7dd3fc}
+</style>
+</head>
+<body>
+<header>
+<h1>⚡ Tools Serbaguna</h1>
+<p>alat praktis dalam satu aplikasi</p>
+</header>
+<h2>pilih tools</h2>
+<div class="grid">
+<button class="card" onclick="openTool('catatan')"><span>📝</span><h3>catatan</h3><p>simpan catatan</p></button>
+<button class="card" onclick="openTool('kalkulator')"><span>🧮</span><h3>kalkulator</h3><p>hitung angka</p></button>
+<button class="card" onclick="openTool('teks')"><span>🔤</span><h3>pengolah teks</h3><p>ubah huruf dan teks</p></button>
+<button class="card" onclick="openTool('waktu')"><span>⏰</span><h3>jam digital</h3><p>lihat waktu sekarang</p></button>
+</div>
+<div class="panel">
+<h2 id="title">selamat datang 👋</h2>
+<div id="content">pilih salah satu tools di atas untuk mulai.</div>
+<div id="result"></div>
+</div>
+<script>
+function openTool(tool){
+const c=document.getElementById('content');
+const r=document.getElementById('result');
+r.textContent='';
+if(tool==='catatan'){
+document.getElementById('title').textContent='📝 catatan';
+c.innerHTML='<textarea id="note" rows="5" placeholder="tulis catatan ko..."></textarea><button class="action" onclick="saveNote()">simpan catatan</button><button class="action" onclick="loadNote()">buka catatan</button>';
+}
+if(tool==='kalkulator'){
+document.getElementById('title').textContent='🧮 kalkulator';
+c.innerHTML='<input id="a" type="number" placeholder="angka pertama"><input id="b" type="number" placeholder="angka kedua"><button class="action" onclick="calc(\'+\')">+</button> <button class="action" onclick="calc(\'-\')">−</button> <button class="action" onclick="calc(\'*\')">×</button> <button class="action" onclick="calc(\'/\')">÷</button>';
+}
+if(tool==='teks'){
+document.getElementById('title').textContent='🔤 pengolah teks';
+c.innerHTML='<textarea id="txt" rows="4" placeholder="masukkan teks..."></textarea><button class="action" onclick="transform(1)">HURUF BESAR</button> <button class="action" onclick="transform(2)">huruf kecil</button> <button class="action" onclick="transform(3)">hitung karakter</button>';
+}
+if(tool==='waktu'){
+document.getElementById('title').textContent='⏰ jam digital';
+c.innerHTML='<p id="clock" style="font-size:32px;color:#38bdf8"></p>';
+tick();
+}
+}
+function saveNote(){localStorage.setItem('note',document.getElementById('note').value);document.getElementById('result').textContent='catatan tersimpan!'}
+function loadNote(){document.getElementById('note').value=localStorage.getItem('note')||'';document.getElementById('result').textContent='catatan dibuka'}
+function calc(op){
+let a=Number(document.getElementById('a').value),b=Number(document.getElementById('b').value);
+if(document.getElementById('a').value===''||document.getElementById('b').value===''){document.getElementById('result').textContent='masukkan kedua angka dulu';return}
+if(op==='/'&&b===0){document.getElementById('result').textContent='angka tidak bisa dibagi nol';return}
+let v=op==='+'?a+b:op==='-'?a-b:op==='*'?a*b:a/b;
+document.getElementById('result').textContent='hasil: '+v;
+}
+function transform(t){
+let s=document.getElementById('txt').value;
+document.getElementById('result').textContent=t===1?s.toUpperCase():t===2?s.toLowerCase():'jumlah karakter: '+s.length;
+}
+function tick(){let e=document.getElementById('clock');if(e)e.textContent=new Date().toLocaleTimeString('id-ID');}
+setInterval(tick,1000);
+</script>
+</body>
+</html>
